@@ -1,21 +1,21 @@
 (ns github
   {:clj-kondo/config '{:lint-as {promesa.core/let clojure.core/let}}}
   (:require ["ink" :refer [render Text]]
-            ["ink-spinner" :refer [default] :rename {default Spinner}]
             ["ink-quicksearch-input" :refer [QuickSearch]]
-            ["node-fetch" :as fetch]
-            ["swr" :refer [default] :rename {default useSWR}]
-            ["open" :as open]
-            [promesa.core :as p]
-            [reagent.core :as r]
-            [goog.object :as g]))
+            ["ink-spinner$default.default" :as Spinner]
+            ["node-fetch$default" :as fetch]
+            ["open$default" :as open]
+            ["swr$default.default" :as useSWR]
+            ["term-size$default" :as get-size]
+            [goog.object :as g]
+            [reagent.core :as r]))
 
 (defonce repo-data
   {:user (first *command-line-args*)
    :repo (second *command-line-args*)
    :branch (or (-> (next *command-line-args*) (next)) "master")})
 
-(defonce term-size (atom nil))
+(defonce term-size (atom (get-size)))
 (defonce selected (r/atom nil))
 
 (defn get-repo [user repo branch]
@@ -81,7 +81,4 @@
   [:<>
    [:f> files {:repo repo-data}]])
 
-(p/let [get-size (-> (js/import "term-size")
-                     (.then #(g/get % "default")))]
-  (reset! term-size (js->clj (get-size) :keywordize-keys true))
-  (render (r/as-element [app])))
+(render (r/as-element [app]))
