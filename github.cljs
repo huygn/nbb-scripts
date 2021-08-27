@@ -15,7 +15,7 @@
    :repo (second *command-line-args*)
    :branch (or (-> (next *command-line-args*) (next)) "master")})
 
-(defonce term-size (atom (get-size)))
+(defonce term-size (atom (js->clj (get-size) :keywordize-keys true)))
 (defonce selected (r/atom nil))
 
 (defn get-repo [user repo branch]
